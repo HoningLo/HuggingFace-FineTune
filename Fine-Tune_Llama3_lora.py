@@ -15,14 +15,14 @@ tokenizer.pad_token = tokenizer.eos_token
 tokenizer.pad_token, tokenizer.pad_token_id, tokenizer.eos_token_id
 
 def process_func(example):
-    MAX_LENGTH = 384    # Llama分词器会将一个中文字切分为多个token，因此需要放开一些最大长度，保证数据的完整性
+    MAX_LENGTH = 384    # Llama 分詞器會將一個中文字切分為多個 token，因此需要放開一些最大長度，保證數據的完整性
     input_ids, attention_mask, labels = [], [], []
     instruction = tokenizer(f"<|start_header_id|>user<|end_header_id|>\n\n{example['instruction'] + example['input']}<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n", add_special_tokens=False)  # add_special_tokens 不在开头加 special_tokens
     response = tokenizer(f"{example['output']}<|eot_id|>", add_special_tokens=False)
     input_ids = instruction["input_ids"] + response["input_ids"] + [tokenizer.pad_token_id]
-    attention_mask = instruction["attention_mask"] + response["attention_mask"] + [1]  # 因为eos token咱们也是要关注的所以 补充为1
+    attention_mask = instruction["attention_mask"] + response["attention_mask"] + [1]  # 因為 eos_token 也是要關注的所以補 1
     labels = [-100] * len(instruction["input_ids"]) + response["input_ids"] + [tokenizer.pad_token_id]
-    if len(input_ids) > MAX_LENGTH:  # 做一个截断
+    if len(input_ids) > MAX_LENGTH:  # 做一個截斷
         input_ids = input_ids[:MAX_LENGTH]
         attention_mask = attention_mask[:MAX_LENGTH]
         labels = labels[:MAX_LENGTH]
@@ -47,9 +47,9 @@ model.dtype
 config = LoraConfig(
     task_type=TaskType.CAUSAL_LM, 
     target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
-    inference_mode=False, # 训练模式
+    inference_mode=False, # 訓練模型
     r=8, # Lora 秩
-    lora_alpha=32, # Lora alaph，具体作用参见 Lora 原理
+    lora_alpha=32, # Lora alaph，具體作用參考 Lora 原理
     lora_dropout=0.1# Dropout 比例
 )
 config

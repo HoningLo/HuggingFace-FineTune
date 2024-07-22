@@ -5,22 +5,22 @@ from peft import PeftModel, LoraConfig, TaskType, get_peft_model
 mode_path = "meta-llama/Meta-Llama-3-8B-Instruct"
 lora_path = "./llama3_lora"
 
-# 加载tokenizer
+# 讀取 tokenizer
 tokenizer = AutoTokenizer.from_pretrained(mode_path, use_fast=False, trust_remote_code=True)
 # tokenizer.pad_token = tokenizer.eos_token
 # tokenizer.pad_token_id = tokenizer.eos_token_id
 # tokenizer.pad_token, tokenizer.pad_token_id, tokenizer.eos_token_id
 
-# 加载模型
+# 讀取模型
 model = AutoModelForCausalLM.from_pretrained(mode_path, device_map="auto",torch_dtype=torch.bfloat16)
 
-# 加载lora权重
+# 讀取 lora 權重
 config = LoraConfig(
     task_type=TaskType.CAUSAL_LM, 
     target_modules=["q_proj", "k_proj", "v_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
-    inference_mode=False, # 训练模式
+    inference_mode=False, # 訓練訓練
     r=8, # Lora 秩
-    lora_alpha=32, # Lora alaph，具体作用参见 Lora 原理
+    lora_alpha=32, # Lora alaph，具體具體 lora 原理
     lora_dropout=0.1# Dropout 比例
 )
 model = PeftModel.from_pretrained(model, model_id=lora_path, config=config)
