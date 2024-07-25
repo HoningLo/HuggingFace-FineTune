@@ -9,7 +9,7 @@ from datasets import load_dataset
 ds = load_dataset("Honing/ruozhiba_twp", split="all")
 ds[0:5]
 
-model_name = "meta-llama/Meta-Llama-3-8B-Instruct"
+model_name = "meta-llama/Meta-Llama-3.1-8B-Instruct"
 tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False, trust_remote_code=True)
 tokenizer.pad_token = tokenizer.eos_token
 tokenizer.pad_token, tokenizer.pad_token_id, tokenizer.eos_token_id
@@ -59,8 +59,8 @@ print(model.print_trainable_parameters())
 
 args = TrainingArguments(
     output_dir="./output/llama3",
-    per_device_train_batch_size=4,
-    gradient_accumulation_steps=4,
+    per_device_train_batch_size=2,
+    gradient_accumulation_steps=2,
     logging_steps=10,
     num_train_epochs=3,
     save_steps=100,

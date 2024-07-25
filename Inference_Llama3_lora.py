@@ -2,7 +2,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 import torch
 from peft import PeftModel, LoraConfig, TaskType, get_peft_model
 
-mode_path = "meta-llama/Meta-Llama-3-8B-Instruct"
+mode_path = "meta-llama/Meta-Llama-3.1-8B-Instruct"
 lora_path = "./llama3_lora"
 
 # 讀取 tokenizer
@@ -25,11 +25,11 @@ config = LoraConfig(
 )
 model = PeftModel.from_pretrained(model, model_id=lora_path, config=config)
 
-prompt = "爸爸再婚，我是不是就有了個新娘？"
-# prompt = "只剩一個心臟了還能活嗎？"
+prompt = "只剩一個心臟了還能活嗎？"
 # prompt = "樟腦丸是我吃過最難吃的硬糖有奇怪的味道怎麼還有人買"
 # prompt = "馬上要上游泳課了，昨天洗的泳褲還沒乾，怎麼辦?"
 # prompt = "為什麼沒人說ABCD型的成語？"
+# prompt = "爸爸再婚，我是不是就有了個新娘？"
 messages = [
     {"role": "system", "content": "回答使用**繁體中文**"},
     {"role": "user", "content": prompt}
@@ -55,4 +55,5 @@ generated_ids = [
 
 response = tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
 
-print(response)
+print(f"user: {prompt}")
+print(f"assistant: {response}")
